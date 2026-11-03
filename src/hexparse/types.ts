@@ -15,7 +15,12 @@ export interface PatternRecord {
 export interface PatternsData {
   version: number;
   generated_from: number;
-  gaps?: string[];
+  /** Failed package installs, if any. Shape may be string or {package, reason}. */
+  gaps?: unknown[];
+  packages?: string[];
+  empty_packages?: string[];
+  per_addon?: Record<string, number>;
+  ambiguous?: { alias: string; kept: string; skipped: string }[];
   patterns: PatternRecord[];
   /** `"<integer>" -> [startdir, signature]` */
   numbers: Record<string, [string, string]>;
