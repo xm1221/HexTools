@@ -3,3 +3,8 @@
 # Yarn
 .pnp.*
 .yarn/*
+
+# Generated data (large, machine-written)
+public/data/patterns.json
+scripts/data/numbers_2000.json
+.vendor-hexdoc

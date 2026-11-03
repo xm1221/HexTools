@@ -57,7 +57,7 @@ export default function App() {
             size="lg"
             ml="auto"
             component="a"
-            href="https://github.com/object-Object/HexTools"
+            href="https://github.com/xm1221/HexTools"
             target="_blank"
             rel="noopener noreferrer"
           >

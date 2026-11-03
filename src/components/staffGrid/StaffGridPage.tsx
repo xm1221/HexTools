@@ -1,3 +1,4 @@
+import { Stack } from "@mantine/core";
 import { useHotkeys, useStateHistory } from "@mantine/hooks";
 import _ from "lodash";
 import { useRef, useState } from "react";
@@ -13,6 +14,7 @@ import {
   type ResolvedPattern,
 } from "@hextools/renderer/staffGrid";
 
+import HexParseInput from "./HexParseInput";
 import type { HexToolsGridSettings } from "./StaffGrid.lib";
 import StaffGridControls from "./StaffGridControls";
 import StaffGridTimer from "./StaffGridTimer";
@@ -143,6 +145,13 @@ export default function StaffGridPage() {
           prevDrawTimeMs={prevDrawTimeMs}
         />
       )}
+
+      <Stack gap="xs" pos="absolute" top={16} left={16}>
+        <HexParseInput
+          onPatterns={patternsHandlers.set}
+          onResetPanAndZoom={onResetPanAndZoom}
+        />
+      </Stack>
 
       <StaffGridControls
         patterns={patterns}

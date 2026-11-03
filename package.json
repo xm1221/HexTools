@@ -13,12 +13,14 @@
     "build-packages:renderer": "vite build packages/@hextools/renderer",
     "build-storybook": "storybook build",
     "dev": "vite",
+    "generate-patterns": "python3 scripts/generate_patterns.py",
     "lint": "run-p 'lint:*'",
     "lint:eslint": "eslint .",
     "lint:prettier": "prettier . --check",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "storybook-webgl": "cross-env ENABLE_WEBGL_INSPECTOR=1 yarn storybook"
+    "storybook-webgl": "cross-env ENABLE_WEBGL_INSPECTOR=1 yarn storybook",
+    "verify-hexparse": "yarn build-packages && yarn node scripts/verify-hexparse.mjs"
   },
   "resolutions": {
     "vite": "^8.0.0-beta.13"
