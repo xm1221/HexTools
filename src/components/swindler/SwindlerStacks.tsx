@@ -1,6 +1,7 @@
 import { Group, NumberInput, Stack } from "@mantine/core";
 import { useState } from "react";
 
+import { useI18n } from "../../i18n/I18nContext";
 import type { StackIotaData } from "./StackIota";
 import StackList from "./StackList";
 
@@ -8,6 +9,7 @@ export default function SwindlerStacks() {
   const [lehmer, setLehmer] = useState<number | undefined>(0);
   const [left, setLeft] = useState([{ id: 0, value: "" }]);
   const [right, setRight] = useState(left);
+  const { t } = useI18n();
 
   const handleLehmerChange = (newLehmer: number | undefined) => {
     const newRight = applyLehmer(left, newLehmer ?? 0);
@@ -37,7 +39,7 @@ export default function SwindlerStacks() {
     <Stack>
       <NumberInput
         value={lehmer ?? ""}
-        label="Lehmer Code"
+        label={t("swindler.lehmerCode")}
         onValueChange={({ floatValue }) => {
           handleLehmerChange(floatValue);
         }}

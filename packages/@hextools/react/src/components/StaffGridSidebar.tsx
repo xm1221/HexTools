@@ -18,6 +18,20 @@ import { HexCoord, type ResolvedPattern } from "@hextools/renderer/staffGrid";
 
 import { StaffGridSidebarPattern } from "./StaffGridSidebarPattern";
 
+export interface StaffGridSidebarLabels {
+  patterns: string;
+  copyAngleSignatures: string;
+  copyHexBugCommand: string;
+  share: string;
+}
+
+const DEFAULT_STAFF_GRID_SIDEBAR_LABELS: StaffGridSidebarLabels = {
+  patterns: "Patterns",
+  copyAngleSignatures: "Copy angle signatures",
+  copyHexBugCommand: "Copy HexBug command",
+  share: "Share",
+};
+
 export interface StaffGridSidebarProps extends Pick<
   DrawerProps,
   "opened" | "onClose"
@@ -25,6 +39,8 @@ export interface StaffGridSidebarProps extends Pick<
   patterns: readonly ResolvedPattern[];
   onPatternsChange: (patterns: readonly ResolvedPattern[]) => unknown;
   onPanToPattern: (pattern: ResolvedPattern) => unknown;
+  /** Optional UI strings; defaults to English. */
+  labels?: Partial<StaffGridSidebarLabels>;
 }
 
 export function StaffGridSidebar({
@@ -33,7 +49,9 @@ export function StaffGridSidebar({
   onPanToPattern,
   opened,
   onClose,
+  labels: labelOverrides,
 }: StaffGridSidebarProps) {
+  const labels = { ...DEFAULT_STAFF_GRID_SIDEBAR_LABELS, ...labelOverrides };
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   const copyAndClosePopover = (text: string) => {
@@ -48,6 +66,8 @@ export function StaffGridSidebar({
           variant="transparent"
           size="sm"
           onClick={() => setPopoverOpen((open) => !open)}
+          aria-label={labels.share}
+          title={labels.share}
         >
           <IconShare2 />
         </ActionIcon>
@@ -63,7 +83,7 @@ export function StaffGridSidebar({
               )
             }
           >
-            Copy angle signatures
+            {labels.copyAngleSignatures}
           </Button>
 
           <Button
@@ -74,7 +94,7 @@ export function StaffGridSidebar({
               )
             }
           >
-            Copy HexBug command
+            {labels.copyHexBugCommand}
           </Button>
         </Stack>
       </Popover.Dropdown>
@@ -85,7 +105,7 @@ export function StaffGridSidebar({
     <Drawer
       title={
         <Group gap="md">
-          <Text fw="bold">Patterns</Text>
+          <Text fw="bold">{labels.patterns}</Text>
           {patterns.length > 0 && popover}
         </Group>
       }

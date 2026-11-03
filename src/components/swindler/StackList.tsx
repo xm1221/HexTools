@@ -5,6 +5,7 @@ import { ActionIcon, Stack } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import _ from "lodash";
 
+import { useI18n } from "../../i18n/I18nContext";
 import {
   removeIndex,
   replaceIndex,
@@ -25,6 +26,8 @@ export default function StackList({
   allowInsert,
   mirrored,
 }: StackListProps) {
+  const { t } = useI18n();
+
   return (
     <div>
       <DragDropProvider
@@ -81,6 +84,8 @@ export default function StackList({
             onClick={() => {
               onItemsChange([...items, { id: getNextId(items), value: "" }]);
             }}
+            aria-label={t("swindler.addItem")}
+            title={t("swindler.addItem")}
           >
             <IconPlus />
           </ActionIcon>

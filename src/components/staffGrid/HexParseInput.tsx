@@ -22,6 +22,7 @@ import {
   type PatternsData,
   type ParseResult,
 } from "../../hexparse";
+import { useI18n } from "../../i18n/I18nContext";
 import { staffGridButtonProps } from "./StaffGrid.lib";
 
 export interface HexParseInputProps {
@@ -47,6 +48,7 @@ export default function HexParseInput({
 }: HexParseInputProps) {
   const [opened, { open, close }] = useDisclosure(false);
   const isMobile = useMediaQuery("(max-width: 30em)");
+  const { t, tParseMessage } = useI18n();
 
   const [input, setInput] = useState(PLACEHOLDER);
   const [data, setData] = useState<PatternsData | null>(null);
@@ -67,7 +69,7 @@ export default function HexParseInput({
       })
       .catch((error: unknown) => {
         if (!cancelled) {
-          setLoadError(String(error));
+          setLoadError(error instanceof Error ? error.message : String(error));
         }
       });
     return () => {
@@ -95,15 +97,15 @@ export default function HexParseInput({
         opened={opened}
         onClose={close}
         fullScreen={isMobile}
-        title="Parse patterns"
+        title={t("hexParse.title")}
         removeScrollProps={{
           allowPinchZoom: true,
         }}
       >
         <Stack>
           <Textarea
-            label="Input"
-            description="Whitespace-separated tokens, e.g. num_1 num_2 add"
+            label={t("hexParse.input")}
+            description={t("hexParse.description")}
             placeholder={PLACEHOLDER}
             value={input}
             onChange={(event) => setInput(event.currentTarget.value)}
@@ -117,9 +119,9 @@ export default function HexParseInput({
             <Alert
               color="red"
               icon={<IconAlertTriangle />}
-              title="Couldn't load patterns.json"
+              title={t("hexParse.loadError")}
             >
-              {loadError}
+              {tParseMessage(loadError)}
             </Alert>
           )}
 
@@ -127,17 +129,20 @@ export default function HexParseInput({
             <Alert
               color={errorCount > 0 ? "red" : "yellow"}
               icon={<IconAlertTriangle />}
-              title={`${errorCount} error(s), ${warningCount} warning(s)`}
+              title={t("hexParse.errorWarningCount", {
+                errors: errorCount,
+                warnings: warningCount,
+              })}
             >
               <Stack gap={4}>
                 {Object.entries(result.errors).map(([index, message]) => (
                   <Text key={index} size="sm">
-                    #{Number(index) + 1}: {message}
+                    #{Number(index) + 1}: {tParseMessage(message)}
                   </Text>
                 ))}
                 {Object.entries(result.warnings).map(([index, message]) => (
                   <Text key={index} size="sm" c="dimmed">
-                    #{Number(index) + 1}: {message}
+                    #{Number(index) + 1}: {tParseMessage(message)}
                   </Text>
                 ))}
               </Stack>
@@ -146,10 +151,18 @@ export default function HexParseInput({
 
           {result != null && (
             <Group gap="xs">
-              <Badge variant="light">{result.patterns.length} patterns</Badge>
-              {errorCount > 0 && <Badge color="red">{errorCount} errors</Badge>}
+              <Badge variant="light">
+                {t("hexParse.patternCount", { n: result.patterns.length })}
+              </Badge>
+              {errorCount > 0 && (
+                <Badge color="red">
+                  {t("hexParse.errorCount", { n: errorCount })}
+                </Badge>
+              )}
               {warningCount > 0 && (
-                <Badge color="yellow">{warningCount} warnings</Badge>
+                <Badge color="yellow">
+                  {t("hexParse.warningCount", { n: warningCount })}
+                </Badge>
               )}
             </Group>
           )}
@@ -160,7 +173,7 @@ export default function HexParseInput({
             loading={data == null && loadError == null}
             disabled={Boolean(disabled) || data == null}
           >
-            Parse and draw
+            {t("hexParse.parseAndDraw")}
           </Button>
         </Stack>
       </Modal>
@@ -169,7 +182,8 @@ export default function HexParseInput({
         {...staffGridButtonProps}
         onClick={open}
         disabled={disabled}
-        title="Parse patterns"
+        aria-label={t("hexParse.title")}
+        title={t("hexParse.title")}
       >
         <IconKeyboard />
       </ActionIcon>

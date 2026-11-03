@@ -17,6 +17,7 @@ import { useRequestDeviceMotionPermission } from "@hextools/react";
 import { mod } from "@hextools/renderer";
 import { MAX_GRID_ZOOM, MIN_GRID_ZOOM } from "@hextools/renderer/staffGrid";
 
+import { useI18n } from "../../i18n/I18nContext";
 import type { KeysOfValue } from "../../utils/types";
 import {
   staffGridButtonProps,
@@ -54,6 +55,7 @@ export default function StaffGridSettings({
 
   const [opened, { open, close }] = useDisclosure(false);
   const isMobile = useMediaQuery("(max-width: 30em)");
+  const { t } = useI18n();
 
   const {
     canRequestPermission: canRequestMotionPermission,
@@ -61,7 +63,7 @@ export default function StaffGridSettings({
   } = useRequestDeviceMotionPermission();
 
   const requestMotionPermissionError = !canRequestMotionPermission
-    ? "Device motion permission denied :("
+    ? t("settings.motionPermissionDenied")
     : null;
 
   function getSetter<T extends keyof HexToolsGridSettings>(
@@ -91,7 +93,7 @@ export default function StaffGridSettings({
         opened={opened}
         onClose={close}
         fullScreen={isMobile}
-        title="Settings"
+        title={t("settings.title")}
         removeScrollProps={{
           allowPinchZoom: true, // Allow pinch to zoom on mobile devices
         }}
@@ -103,11 +105,11 @@ export default function StaffGridSettings({
               setGuiScale(mod(guiScale - 1 + (event.shiftKey ? -1 : 1), 5) + 1)
             }
           >
-            GUI Scale: {guiScale}
+            {t("settings.guiScale", { n: guiScale })}
           </Button>
 
           <ControlledNumberInput
-            label="Grid Zoom"
+            label={t("settings.gridZoom")}
             value={gridZoom}
             onChange={getSetter("gridZoom")}
             allowNegative={false}
@@ -117,14 +119,14 @@ export default function StaffGridSettings({
           />
 
           <Switch
-            label="Enable Wobbly Patterns"
+            label={t("settings.enableWobblyPatterns")}
             checked={enableZappyPoints}
             onChange={getSwitchSetter("enableZappyPoints")}
           />
 
           {enableZappyPoints && (
             <Switch
-              label="Patterns Wobble On Shake"
+              label={t("settings.wobbleOnShake")}
               checked={zappyOnShake}
               disabled={!canRequestMotionPermission}
               error={requestMotionPermissionError}
@@ -139,39 +141,39 @@ export default function StaffGridSettings({
           )}
 
           <Switch
-            label="Ctrl Toggles Off Stroke Order"
+            label={t("settings.ctrlTogglesOffStrokeOrder")}
             checked={ctrlTogglesOffStrokeOrder}
             onChange={getSwitchSetter("ctrlTogglesOffStrokeOrder")}
           />
 
           <Switch
-            label="Clicking Toggles Drawing"
+            label={t("settings.clickingTogglesDrawing")}
             checked={clickingTogglesDrawing}
             onChange={getSwitchSetter("clickingTogglesDrawing")}
           />
 
           <Switch
-            label="Click To Edit Patterns"
+            label={t("settings.clickToEditPatterns")}
             checked={enableEditingPatterns}
             onChange={getSwitchSetter("enableEditingPatterns")}
             disabled={dynamicResolutionURL != null}
           />
 
           <Switch
-            label="Automatically Set Pattern Color"
+            label={t("settings.autoPatternColor")}
             checked={autoPatternType}
             onChange={getSwitchSetter("autoPatternType")}
             disabled={dynamicResolutionURL != null}
           />
 
           <Switch
-            label="Show Draw Time"
+            label={t("settings.showDrawTime")}
             checked={showDrawTime}
             onChange={getSwitchSetter("showDrawTime")}
           />
 
           <InputWrapper
-            label="Action On Shake"
+            label={t("settings.actionOnShake")}
             error={requestMotionPermissionError}
             labelElement="div"
           >
@@ -187,22 +189,22 @@ export default function StaffGridSettings({
                 );
               }}
               data={[
-                { label: "None", value: "none" },
-                { label: "Undo", value: "undo" },
-                { label: "Clear Grid", value: "clear" },
+                { label: t("settings.none"), value: "none" },
+                { label: t("settings.undo"), value: "undo" },
+                { label: t("settings.clearGrid"), value: "clear" },
               ]}
               fullWidth
             />
           </InputWrapper>
 
-          <InputWrapper label="Grid Dots Mode" labelElement="div">
+          <InputWrapper label={t("settings.gridDotsMode")} labelElement="div">
             <SegmentedControl
               value={dotsMode}
               onChange={getSetter("dotsMode")}
               data={[
                 { label: "None", value: "none" },
-                { label: "Around Mouse", value: "mouse" },
-                { label: "Full Grid", value: "all" },
+                { label: t("settings.aroundMouse"), value: "mouse" },
+                { label: t("settings.fullGrid"), value: "all" },
               ]}
               fullWidth
             />
@@ -215,11 +217,11 @@ export default function StaffGridSettings({
             chevronPosition="left"
           >
             <Accordion.Item value="value">
-              <Accordion.Control>Advanced Settings</Accordion.Control>
+              <Accordion.Control>{t("settings.advanced")}</Accordion.Control>
               <Accordion.Panel>
                 {enableZappyPoints && (
                   <ControlledNumberInput
-                    label="Pattern Wobbliness"
+                    label={t("settings.wobbliness")}
                     value={zappyVariance}
                     onChange={getSetter("zappyVariance")}
                     allowNegative={false}
@@ -229,7 +231,7 @@ export default function StaffGridSettings({
 
                 {dotsMode === "mouse" && (
                   <ControlledNumberInput
-                    label="Mouse Dots Radius"
+                    label={t("settings.mouseDotsRadius")}
                     value={mouseDotsRadius}
                     onChange={getSetter("mouseDotsRadius")}
                     allowNegative={false}
@@ -239,8 +241,8 @@ export default function StaffGridSettings({
                 )}
 
                 <TextInput
-                  label="Dynamic Pattern Resolution URL"
-                  description="When set, all drawn patterns are sent to the /resolve endpoint of this URL to determine the pattern's color."
+                  label={t("settings.dynamicResolutionURL")}
+                  description={t("settings.dynamicResolutionDescription")}
                   placeholder="http://127.0.0.1:8000"
                   value={dynamicResolutionURL ?? ""}
                   onChange={(event) =>
@@ -259,7 +261,7 @@ export default function StaffGridSettings({
                   color="red"
                   onClick={onResetSettings}
                 >
-                  Reset All Settings
+                  {t("settings.resetAll")}
                 </Button>
               </Accordion.Panel>
             </Accordion.Item>
@@ -267,7 +269,12 @@ export default function StaffGridSettings({
         </Stack>
       </Modal>
 
-      <ActionIcon {...staffGridButtonProps} onClick={open}>
+      <ActionIcon
+        {...staffGridButtonProps}
+        onClick={open}
+        aria-label={t("settings.title")}
+        title={t("settings.title")}
+      >
         <IconSettings />
       </ActionIcon>
     </>

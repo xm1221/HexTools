@@ -16,12 +16,24 @@ import { ColorSchemeButton } from "@hextools/react";
 import HeaderNavLink from "./components/HeaderNavLink";
 import StaffGridPage from "./components/staffGrid/StaffGridPage";
 import SwindlerStacks from "./components/swindler/SwindlerStacks";
+import { useI18n } from "./i18n/I18nContext";
+import LanguageSwitcher from "./i18n/LanguageSwitcher";
 
 export default function App() {
   const mobileBreakpoint = "xs";
   const isMobile = useMatches({ base: true, [mobileBreakpoint]: false });
   const [sidebarOpen, { toggle: toggleSidebar, close: closeSidebar }] =
     useDisclosure();
+  const { t } = useI18n();
+
+  const routes = [
+    {
+      path: "/StaffGrid",
+      label: t("nav.staffGrid"),
+      component: StaffGridPage,
+    },
+    { path: "/Swindler", label: t("nav.swindler"), component: SwindlerStacks },
+  ];
 
   const navButtons = routes.map(({ path, label }) => (
     <HeaderNavLink
@@ -47,7 +59,11 @@ export default function App() {
       <AppShell.Header>
         <Group h="100%" mx="xs" gap="xs" align="center">
           {isMobile ? (
-            <Burger opened={sidebarOpen} onClick={toggleSidebar} />
+            <Burger
+              opened={sidebarOpen}
+              onClick={toggleSidebar}
+              aria-label={t("nav.toggleNavigation")}
+            />
           ) : (
             navButtons
           )}
@@ -60,11 +76,19 @@ export default function App() {
             href="https://github.com/xm1221/HexTools"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={t("header.github")}
+            title={t("header.github")}
           >
             <IconBrandGithub />
           </ActionIcon>
 
-          <ColorSchemeButton variant="default" size="lg" />
+          <LanguageSwitcher />
+
+          <ColorSchemeButton
+            variant="default"
+            size="lg"
+            aria-label={t("header.toggleColorScheme")}
+          />
         </Group>
       </AppShell.Header>
 
@@ -88,8 +112,3 @@ export default function App() {
     </AppShell>
   );
 }
-
-const routes = [
-  { path: "/StaffGrid", label: "Staff Grid", component: StaffGridPage },
-  { path: "/Swindler", label: "Swindler", component: SwindlerStacks },
-];

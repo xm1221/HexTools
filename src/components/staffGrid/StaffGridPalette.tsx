@@ -16,6 +16,8 @@ import {
 } from "@hextools/renderer/staffGrid";
 
 import { RGBColor } from "../../../packages/@hextools/renderer/src/colors";
+import { useI18n } from "../../i18n/I18nContext";
+import type { MessageKey } from "../../i18n/messages";
 import DoubleColorSwatch from "../DoubleColorSwatch";
 import { staffGridButtonProps } from "./StaffGrid.lib";
 
@@ -31,6 +33,7 @@ export default function StaffGridPalette({
   disabled,
 }: StaffGridPaletteProps) {
   const combobox = useCombobox();
+  const { t } = useI18n();
 
   const theme = useMantineTheme();
   const activeColors = theme.variantColorResolver({
@@ -73,6 +76,8 @@ export default function StaffGridPalette({
           {...staffGridButtonProps}
           onClick={() => combobox.toggleDropdown()}
           disabled={disabled}
+          aria-label={t("palette.title")}
+          title={t("palette.title")}
         >
           <IconPalette color={RGBColor.toCSS(patternType.color)} />
         </ActionIcon>
@@ -97,7 +102,7 @@ export default function StaffGridPalette({
                   rightColor={RGBColor.toCSS(fadeColor)}
                   size={20}
                 />
-                {name}
+                {t(PATTERN_TYPE_KEYS[name])}
               </Group>
             </Combobox.Option>
           ))}
@@ -108,3 +113,14 @@ export default function StaffGridPalette({
 }
 
 const CUSTOM_NAME = "custom";
+
+/** Display name of each built-in pattern type, keyed by `PATTERN_TYPES` name. */
+const PATTERN_TYPE_KEYS: Record<string, MessageKey> = {
+  Evaluated: "patternTypes.evaluated",
+  Escaped: "patternTypes.escaped",
+  Undone: "patternTypes.undone",
+  Errored: "patternTypes.errored",
+  Invalid: "patternTypes.invalid",
+  Unresolved: "patternTypes.unresolved",
+  [CUSTOM_NAME]: "patternTypes.custom",
+};

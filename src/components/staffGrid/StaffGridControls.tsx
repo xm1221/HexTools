@@ -15,6 +15,7 @@ import {
 import { StaffGridSidebar, type StaffGridSidebarProps } from "@hextools/react";
 import { type ResolvedPattern } from "@hextools/renderer/staffGrid";
 
+import { useI18n } from "../../i18n/I18nContext";
 import { staffGridButtonProps } from "./StaffGrid.lib";
 import type { StaffGridPaletteProps } from "./StaffGridPalette";
 import StaffGridPalette from "./StaffGridPalette";
@@ -47,6 +48,7 @@ export default function StaffGridControls({
 }: StaffGridControlsProps) {
   const [sidebarOpen, { toggle: toggleSidebar, close: closeSidebar }] =
     useDisclosure(false);
+  const { t } = useI18n();
 
   const hasDynamicResolutionURL = settings.dynamicResolutionURL != null;
 
@@ -59,7 +61,12 @@ export default function StaffGridControls({
           onResetSettings={onResetSettings}
         />
 
-        <ActionIcon {...staffGridButtonProps} onClick={toggleSidebar}>
+        <ActionIcon
+          {...staffGridButtonProps}
+          onClick={toggleSidebar}
+          aria-label={t("controls.patternList")}
+          title={t("controls.patternList")}
+        >
           <IconMenu2 />
         </ActionIcon>
 
@@ -73,6 +80,8 @@ export default function StaffGridControls({
           {...staffGridButtonProps}
           onClick={() => patternsHandlers.back()}
           disabled={patternsHistory.current === 0 || hasDynamicResolutionURL}
+          aria-label={t("controls.undo")}
+          title={t("controls.undo")}
         >
           <IconArrowBackUp />
         </ActionIcon>
@@ -84,6 +93,8 @@ export default function StaffGridControls({
             patternsHistory.current === patternsHistory.history.length - 1
             || hasDynamicResolutionURL
           }
+          aria-label={t("controls.redo")}
+          title={t("controls.redo")}
         >
           <IconArrowForwardUp />
         </ActionIcon>
@@ -92,11 +103,18 @@ export default function StaffGridControls({
           {...staffGridButtonProps}
           onClick={() => patternsHandlers.set([])}
           disabled={patterns.length === 0}
+          aria-label={t("controls.clearGrid")}
+          title={t("controls.clearGrid")}
         >
           <IconTrash />
         </ActionIcon>
 
-        <ActionIcon {...staffGridButtonProps} onClick={onResetPanAndZoom}>
+        <ActionIcon
+          {...staffGridButtonProps}
+          onClick={onResetPanAndZoom}
+          aria-label={t("controls.resetView")}
+          title={t("controls.resetView")}
+        >
           <IconFocusCentered />
         </ActionIcon>
       </Stack>
@@ -107,6 +125,12 @@ export default function StaffGridControls({
         onPanToPattern={onPanToPattern}
         opened={sidebarOpen}
         onClose={closeSidebar}
+        labels={{
+          patterns: t("sidebar.patterns"),
+          copyAngleSignatures: t("sidebar.copyAngleSignatures"),
+          copyHexBugCommand: t("sidebar.copyHexBugCommand"),
+          share: t("sidebar.share"),
+        }}
       />
     </>
   );
