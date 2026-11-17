@@ -1,0 +1,7 @@
+# Revalidate HTML so a proxied custom domain cannot keep serving an old entry.
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Hashed build output can stay cached; the filename changes on every build.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
