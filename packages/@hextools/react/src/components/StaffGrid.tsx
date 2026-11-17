@@ -2,6 +2,7 @@ import React, {
   useEffect,
   useEffectEvent,
   useImperativeHandle,
+  useLayoutEffect,
   useRef,
 } from "react";
 
@@ -20,6 +21,11 @@ export interface StaffGridProps {
   onPatternTypeChange: (type: NamedResolvedPatternType) => unknown;
   onPatternDrawn?: (pattern: ResolvedPattern, drawTimeMs: number) => unknown;
   settings: GuiSpellcastingSettings;
+  /**
+   * Keep the WebGL drawing buffer after each frame so another canvas can
+   * copy it (used by the meme exporter).
+   */
+  preserveDrawingBuffer?: boolean;
   ref?: React.Ref<StaffGridRef>;
 }
 
@@ -28,6 +34,8 @@ export interface StaffGridRef {
   resetPanAndZoom: () => void;
   cancelPattern: () => void;
   setZappyMultiplier: (value: number) => void;
+  /** The on-screen WebGL canvas, after the latest rendered frame. */
+  getCanvas: () => HTMLCanvasElement | null;
 }
 
 export function StaffGrid({
@@ -37,6 +45,7 @@ export function StaffGrid({
   onPatternTypeChange,
   onPatternDrawn,
   settings,
+  preserveDrawingBuffer = false,
   ref,
 }: StaffGridProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -63,6 +72,7 @@ export function StaffGrid({
       setZappyMultiplier: (value) => {
         zappyMultiplierRef.current = value;
       },
+      getCanvas: () => canvasRef.current,
     }),
     [],
   );
@@ -196,7 +206,10 @@ export function StaffGrid({
     }
 
     const canvas = canvasRef.current;
-    const gl = canvas.getContext("webgl2");
+    const gl = canvas.getContext(
+      "webgl2",
+      preserveDrawingBuffer ? { preserveDrawingBuffer: true } : undefined,
+    );
     if (!gl) {
       throw new Error("WebGL2 not supported :(");
     }
@@ -245,7 +258,7 @@ export function StaffGrid({
     };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (guiRef.current) {
       guiRef.current.settings = settings;
       guiRef.current.onPatternsChange = onPatternsChange;

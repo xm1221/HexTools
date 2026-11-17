@@ -14,6 +14,7 @@ import { Redirect, Route, Switch } from "wouter";
 import { ColorSchemeButton } from "@hextools/react";
 
 import HeaderNavLink from "./components/HeaderNavLink";
+import MemePage from "./components/meme/MemePage";
 import StaffGridPage from "./components/staffGrid/StaffGridPage";
 import SwindlerStacks from "./components/swindler/SwindlerStacks";
 import { useI18n } from "./i18n/I18nContext";
@@ -32,6 +33,7 @@ export default function App() {
       label: t("nav.staffGrid"),
       component: StaffGridPage,
     },
+    { path: "/Meme", label: t("nav.meme"), component: MemePage },
     { path: "/Swindler", label: t("nav.swindler"), component: SwindlerStacks },
   ];
 
