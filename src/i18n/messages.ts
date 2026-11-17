@@ -12,6 +12,7 @@ const en = {
   "language.label": "Language",
 
   "nav.staffGrid": "Staff Grid",
+  "nav.meme": "Meme",
   "nav.swindler": "Swindler",
   "nav.toggleNavigation": "Toggle navigation",
 
@@ -77,6 +78,19 @@ const en = {
 
   "swindler.lehmerCode": "Lehmer Code",
   "swindler.addItem": "Add item",
+
+  "meme.upload": "Upload photo",
+  "meme.draw": "Draw patterns",
+  "meme.moveImage": "Move photo (hold Space)",
+  "meme.fitImage": "Fit photo",
+  "meme.gridDots": "Grid dots",
+  "meme.export": "Export PNG",
+  "meme.resetPatterns": "Reset pattern view",
+  "meme.drop": "Drop to use this photo",
+  "meme.empty": "Upload a photo, then draw or import patterns.",
+  "meme.imageError": "Couldn't read that image.",
+  "meme.hint":
+    "Drag to draw. Middle-drag or pinch moves patterns; scroll or pinch resizes them. Hold Space, or use the hand tool, to move and zoom the photo.",
 } as const;
 
 export type MessageKey = keyof typeof en;
@@ -87,6 +101,7 @@ const zh: Record<MessageKey, string> = {
   "language.label": "语言",
 
   "nav.staffGrid": "法杖网格",
+  "nav.meme": "表情包",
   "nav.swindler": "堆栈重排",
   "nav.toggleNavigation": "切换导航",
 
@@ -152,6 +167,19 @@ const zh: Record<MessageKey, string> = {
 
   "swindler.lehmerCode": "Lehmer 码",
   "swindler.addItem": "添加一项",
+
+  "meme.upload": "上传底图",
+  "meme.draw": "绘制图案",
+  "meme.moveImage": "移动底图（按住空格）",
+  "meme.fitImage": "适配底图",
+  "meme.gridDots": "网格点",
+  "meme.export": "导出 PNG",
+  "meme.resetPatterns": "重置图案视图",
+  "meme.drop": "松开以使用这张图片",
+  "meme.empty": "上传一张底图，然后绘制或导入图案。",
+  "meme.imageError": "无法读取这张图片。",
+  "meme.hint":
+    "拖动绘制。中键或双指移动图案，滚轮或双指缩放图案。按住空格，或使用手型工具，可移动和缩放底图。",
 };
 
 export const messages: {
