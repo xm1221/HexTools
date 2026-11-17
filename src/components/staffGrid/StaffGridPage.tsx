@@ -1,7 +1,9 @@
-import { Stack } from "@mantine/core";
+import { Button, Stack } from "@mantine/core";
 import { useHotkeys, useStateHistory } from "@mantine/hooks";
+import { IconSticker } from "@tabler/icons-react";
 import _ from "lodash";
 import { useRef, useState } from "react";
+import { Link } from "wouter";
 
 import { StaffGrid, type StaffGridRef, useDeviceMotion } from "@hextools/react";
 import { useIsTouchscreen } from "@hextools/react";
@@ -14,12 +16,14 @@ import {
   type ResolvedPattern,
 } from "@hextools/renderer/staffGrid";
 
+import { useI18n } from "../../i18n/I18nContext";
 import HexParseInput from "./HexParseInput";
 import type { HexToolsGridSettings } from "./StaffGrid.lib";
 import StaffGridControls from "./StaffGridControls";
 import StaffGridTimer from "./StaffGridTimer";
 
 export default function StaffGridPage() {
+  const { t } = useI18n();
   const isTouchscreen = useIsTouchscreen();
 
   const [patterns, patternsHandlers, patternsHistory] = useStateHistory<
@@ -146,7 +150,15 @@ export default function StaffGridPage() {
         />
       )}
 
-      <Stack gap="xs" pos="absolute" top={16} left={16}>
+      <Stack gap="xs" pos="absolute" top={16} left={16} style={{ zIndex: 2 }}>
+        <Button
+          component={Link}
+          href="/Meme"
+          variant="default"
+          leftSection={<IconSticker size={18} />}
+        >
+          {t("nav.meme")}
+        </Button>
         <HexParseInput
           onPatterns={patternsHandlers.set}
           onResetPanAndZoom={onResetPanAndZoom}

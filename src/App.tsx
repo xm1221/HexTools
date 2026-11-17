@@ -59,7 +59,7 @@ export default function App() {
       }}
     >
       <AppShell.Header>
-        <Group h="100%" mx="xs" gap="xs" align="center">
+        <Group h="100%" mx="xs" gap="xs" wrap="nowrap" align="center">
           {isMobile ? (
             <Burger
               opened={sidebarOpen}
@@ -67,30 +67,37 @@ export default function App() {
               aria-label={t("nav.toggleNavigation")}
             />
           ) : (
-            navButtons
+            <Group
+              gap="xs"
+              wrap="nowrap"
+              style={{ minWidth: 0, overflowX: "auto" }}
+            >
+              {navButtons}
+            </Group>
           )}
 
-          <ActionIcon
-            variant="default"
-            size="lg"
-            ml="auto"
-            component="a"
-            href="https://github.com/xm1221/HexTools"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={t("header.github")}
-            title={t("header.github")}
-          >
-            <IconBrandGithub />
-          </ActionIcon>
+          <Group gap="xs" wrap="nowrap" ml="auto" style={{ flexShrink: 0 }}>
+            <ActionIcon
+              variant="default"
+              size="lg"
+              component="a"
+              href="https://github.com/xm1221/HexTools"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={t("header.github")}
+              title={t("header.github")}
+            >
+              <IconBrandGithub />
+            </ActionIcon>
 
-          <LanguageSwitcher />
+            <LanguageSwitcher />
 
-          <ColorSchemeButton
-            variant="default"
-            size="lg"
-            aria-label={t("header.toggleColorScheme")}
-          />
+            <ColorSchemeButton
+              variant="default"
+              size="lg"
+              aria-label={t("header.toggleColorScheme")}
+            />
+          </Group>
         </Group>
       </AppShell.Header>
 
